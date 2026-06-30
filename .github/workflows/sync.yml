@@ -1,0 +1,22 @@
+name: Sync upstream repositories
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 每天 UTC 00:00 执行
+  workflow_dispatch:      # 也支持手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync upstream
+        run: |
+          git remote add upstream https://github.com/NousResearch/hermes-agent.git
+          git fetch upstream
+          git push origin --all
+          git push origin --tags
